@@ -1,6 +1,6 @@
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from models import Informer, Transformer, DLinear, Linear, NLinear
+from models import Informer, Transformer, DLinear, Linear, NLinear, SCINet, ConvFC, MLPMixer
 from utils.tools import EarlyStopping, adjust_learning_rate, visual, test_params_flop
 from utils.metrics import metric
 
@@ -19,6 +19,8 @@ import numpy as np
 
 warnings.filterwarnings('ignore')
 
+non_transformer = ['Linear', 'NLinear', 'DLinear', 'SCINet', 'ConvFC', 'MLPMixer']
+
 class Exp_Main(Exp_Basic):
     def __init__(self, args):
         super(Exp_Main, self).__init__(args)
@@ -30,6 +32,9 @@ class Exp_Main(Exp_Basic):
             'DLinear': DLinear,
             'NLinear': NLinear,
             'Linear': Linear,
+            'SCINet': SCINet,
+            'ConvFC': ConvFC,
+            'MLPMixer': MLPMixer
         }
         model = model_dict[self.args.model].Model(self.args).float()
 
@@ -66,7 +71,7 @@ class Exp_Main(Exp_Basic):
                 # encoder - decoder
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
-                        if 'Linear' in self.args.model:
+                        if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                         else:
                             if self.args.output_attention:
@@ -74,7 +79,7 @@ class Exp_Main(Exp_Basic):
                             else:
                                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
-                    if 'Linear' in self.args.model:
+                    if self.args.model in non_transformer:
                         outputs = self.model(batch_x)
                     else:
                         if self.args.output_attention:
@@ -137,7 +142,7 @@ class Exp_Main(Exp_Basic):
                 # encoder - decoder
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
-                        if 'Linear' in self.args.model:
+                        if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                         else:
                             if self.args.output_attention:
@@ -151,7 +156,7 @@ class Exp_Main(Exp_Basic):
                         loss = criterion(outputs, batch_y)
                         train_loss.append(loss.item())
                 else:
-                    if 'Linear' in self.args.model:
+                    if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                     else:
                         if self.args.output_attention:
@@ -230,7 +235,7 @@ class Exp_Main(Exp_Basic):
                 # encoder - decoder
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
-                        if 'Linear' in self.args.model:
+                        if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                         else:
                             if self.args.output_attention:
@@ -238,7 +243,7 @@ class Exp_Main(Exp_Basic):
                             else:
                                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
-                    if 'Linear' in self.args.model:
+                    if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                     else:
                         if self.args.output_attention:
@@ -321,7 +326,7 @@ class Exp_Main(Exp_Basic):
                 # encoder - decoder
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
-                        if 'Linear' in self.args.model:
+                        if self.args.model in non_transformer:
                             outputs = self.model(batch_x)
                         else:
                             if self.args.output_attention:
@@ -329,7 +334,7 @@ class Exp_Main(Exp_Basic):
                             else:
                                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
-                    if 'Linear' in self.args.model:
+                    if self.args.model in non_transformer:
                         outputs = self.model(batch_x)
                     else:
                         if self.args.output_attention:
