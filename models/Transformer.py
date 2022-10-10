@@ -6,6 +6,28 @@ from layers.SelfAttention_Family import FullAttention, AttentionLayer
 from layers.Embed import DataEmbedding,DataEmbedding_wo_pos,DataEmbedding_wo_temp,DataEmbedding_wo_pos_temp, RevIN
 import numpy as np
 
+class ModifiedLayerNorm(nn.Module):
+    """
+    Modified Layer Normalization normalizes vectors along channel dimension and temporal dimensions.
+    Input: tensor in shape [B, L, D]
+    """
+    def __init__(self, num_channels, eps=1e-05):
+        super().__init__()
+        # The shape of learnable affine parameters is also [num_channels, ], keeping the same as vanilla Layer Normalization.
+        self.weight = nn.Parameter(torch.ones(num_channels))
+        self.bias = nn.Parameter(torch.zeros(num_channels))
+        self.eps = eps
+
+    def forward(self, x):
+        x = x.transpose(1, 2)
+        u = x.mean([1, 2], keepdim=True) # Mean along channel and spatial dimension.
+        s = (x - u).pow(2).mean([1, 2], keepdim=True) # Variance along channel and spatial dimensions.
+        x = (x - u) / torch.sqrt(s + self.eps)
+        x = self.weight.unsqueeze(-1) * x + self.bias.unsqueeze(-1)
+
+        return x.transpose(1, 2)
+        
+
 class Model(nn.Module):
     """
     Vanilla Transformer with O(L^2) complexity
@@ -56,7 +78,8 @@ class Model(nn.Module):
                     activation=configs.activation
                 ) for l in range(configs.e_layers)
             ],
-            norm_layer=torch.nn.LayerNorm(configs.d_model)
+            # norm_layer=torch.nn.LayerNorm(configs.d_model)
+            norm_layer=ModifiedLayerNorm(configs.d_model)
         )
         # Decoder
         self.decoder = Decoder(
@@ -75,21 +98,23 @@ class Model(nn.Module):
                 )
                 for l in range(configs.d_layers)
             ],
-            norm_layer=torch.nn.LayerNorm(configs.d_model),
+            # norm_layer=torch.nn.LayerNorm(configs.d_model),
+            norm_layer=ModifiedLayerNorm(configs.d_model),
             projection=nn.Linear(configs.d_model, configs.c_out, bias=True)
         )
+        # self.rev = RevIN(configs.c_out)
 
     def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec,
                 enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
-
+        
+        # x_enc = self.rev(x_enc.clone(), 'norm')
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)
 
         dec_out = self.dec_embedding(x_dec, x_mark_dec)
         dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
 
-        diff = (x_enc[:, -self.label_len:, :] - dec_out[:, :self.label_len, :]).detach().clone().mean(dim=1, keepdim=True)
-        dec_out += diff
+        # dec_out = self.rev(dec_out, 'denorm')
 
         if self.output_attention:
             return dec_out[:, -self.pred_len:, :], attns
