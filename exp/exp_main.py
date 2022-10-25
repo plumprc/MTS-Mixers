@@ -1,6 +1,6 @@
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from models import Informer, Transformer, DLinear, Linear, NLinear, SCINet, ConvFC, MLPMixer
+from models import Informer, Transformer, DLinear, Linear, NLinear, SCINet, ConvFC, MTSMixer, MTSMatrix, FNet
 from utils.tools import EarlyStopping, adjust_learning_rate, visual, test_params_flop
 from utils.metrics import metric
 
@@ -19,7 +19,7 @@ import numpy as np
 
 warnings.filterwarnings('ignore')
 
-non_transformer = ['Linear', 'NLinear', 'DLinear', 'SCINet', 'ConvFC', 'MTSMixer']
+non_transformer = ['Linear', 'NLinear', 'DLinear', 'SCINet', 'ConvFC', 'MTSMixer', 'MTSMatrix', 'FNet']
 
 class Exp_Main(Exp_Basic):
     def __init__(self, args):
@@ -34,7 +34,9 @@ class Exp_Main(Exp_Basic):
             'Linear': Linear,
             'SCINet': SCINet,
             'ConvFC': ConvFC,
-            'MLPMixer': MLPMixer
+            'MTSMixer': MTSMixer,
+            'MTSMatrix': MTSMatrix,
+            'FNet': FNet
         }
         model = model_dict[self.args.model].Model(self.args).float()
 

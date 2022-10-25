@@ -7,10 +7,11 @@ MTSformer: towards universal multivariate time series modeling based on Transfor
 |Model|MSE|MAE
 |:-:|:-:|:-:
 |Linear|0.084|0.210
-|ConvFC|Exchange|0.081|0.207
-|FEDformer|Exchange|0.148|0.278
-|MTS-Mixer (d_model=512) + RevIN|Exchange|0.134|0.258
-|MTS-Mixer (d_model=4) + RevIN|Exchange|0.115|0.243
+|ConvFC|0.081|0.207
+|FEDformer|0.148|0.278
+|MTS-Mixer (d_model=512) + RevIN|0.134|0.258
+|MTS-Mixer (d_model=4) + RevIN|0.115|0.243
+|MTSMatrix (d_model=16)|0.083|0.202
 
 ### ETTm2 96-1-96
 
@@ -27,6 +28,7 @@ MTSformer: towards universal multivariate time series modeling based on Transfor
 |ConvFC|Weather|0.199|0.257
 |FEDformer|Weather|0.217|0.296
 |MTS-Mixer (d_model=512) + RevIN|Weather|0.167|0.221
+|MTSMatrix (d_model=512)|0.167|0.216
 
 ## Normalization
 ### Exchange 96-1-96
