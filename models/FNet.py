@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from layers.Embed import RevIN
 
 class FNetBlock(nn.Module):
     def __init__(self, input_dim, mlp_dim, dropout=0.1):
@@ -14,6 +15,7 @@ class FNetBlock(nn.Module):
         self.norm_2 = nn.LayerNorm(input_dim)
 
     def fourier_transform(self, x):
+        # return torch.fft.fft2(x, dim=(1, 2)).real
         return torch.fft.fft(x, dim=-1).real
 
     def forward(self, x):
@@ -34,12 +36,14 @@ class Model(nn.Module):
             FNetBlock(configs.enc_in, configs.d_model) for _ in range(configs.e_layers)
         ])
         self.projection = nn.Linear(configs.seq_len, configs.pred_len)
+        self.rev = RevIN(configs.enc_in)
 
     def forward(self, x):
-        x = x.transpose(1, 2)
+        x = self.rev(x, 'norm')
         for layer in self.encoder:
             x = layer(x)
 
-        x = self.projection(x)
+        x = self.projection(x.transpose(1, 2)).transpose(1, 2)
+        x = self.rev(x, 'denorm')
 
-        return x.transpose(1, 2)
+        return x

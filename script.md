@@ -10,6 +10,12 @@ python -u run.py --is_training 1 --root_path ./dataset/ --data_path Weather.csv 
 
 python -u run.py --is_training 1 --root_path ./dataset/ --data_path Weather.csv --model_id Weather_96 --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 21 --dec_in 21 --c_out 21 --des 'Exp' --itr 1 --model Transformer --train_epochs 2
 
+<!-- ETTh1 -->
+
+python -u run.py --is_training 1 --root_path ./dataset/ --data_path ETTh1.csv --model_id ETTh1_96 --data ETTh1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --des 'Exp' --itr 1 --batch_size 32 --learning_rate 0.005 --model NLinear
+
+python -u run.py --is_training 1 --root_path ./dataset/ --data_path ETTh1.csv --model_id ETTh1_96 --data ETTh1 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --des 'Exp' --itr 1 --model Transformer
+
 <!-- ETTm2 -->
 
 python -u run.py --is_training 1 --root_path ./dataset/ --data_path ETTm2.csv --model_id ETTm2_96 --data ETTm2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --des 'Exp' --itr 1 --batch_size 32 --learning_rate 0.005 --model NLinear

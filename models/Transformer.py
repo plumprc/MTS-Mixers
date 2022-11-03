@@ -78,8 +78,8 @@ class Model(nn.Module):
                     activation=configs.activation
                 ) for l in range(configs.e_layers)
             ],
-            # norm_layer=torch.nn.LayerNorm(configs.d_model)
-            norm_layer=ModifiedLayerNorm(configs.d_model)
+            norm_layer=torch.nn.LayerNorm(configs.d_model)
+            # norm_layer=ModifiedLayerNorm(configs.d_model)
         )
         # Decoder
         self.decoder = Decoder(
@@ -98,23 +98,23 @@ class Model(nn.Module):
                 )
                 for l in range(configs.d_layers)
             ],
-            # norm_layer=torch.nn.LayerNorm(configs.d_model),
-            norm_layer=ModifiedLayerNorm(configs.d_model),
+            norm_layer=torch.nn.LayerNorm(configs.d_model),
+            # norm_layer=ModifiedLayerNorm(configs.d_model),
             projection=nn.Linear(configs.d_model, configs.c_out, bias=True)
         )
-        # self.rev = RevIN(configs.c_out)
+        self.rev = RevIN(configs.c_out)
 
     def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec,
                 enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
         
-        # x_enc = self.rev(x_enc.clone(), 'norm')
+        x_enc = self.rev(x_enc.clone(), 'norm')
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)
 
         dec_out = self.dec_embedding(x_dec, x_mark_dec)
         dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
 
-        # dec_out = self.rev(dec_out, 'denorm')
+        dec_out = self.rev(dec_out, 'denorm')
 
         if self.output_attention:
             return dec_out[:, -self.pred_len:, :], attns
