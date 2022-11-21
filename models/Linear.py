@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from layers.Embed import PositionalEmbedding, TokenEmbedding
+from layers.Embedding import PositionalEmbedding, TokenEmbedding
 
 class Model(nn.Module):
     """

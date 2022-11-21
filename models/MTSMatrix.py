@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from layers.Embed import RevIN
+from layers.Invertible import RevIN
 
 class MLPBlock(nn.Module):
     def __init__(self, input_dim, mlp_dim) :

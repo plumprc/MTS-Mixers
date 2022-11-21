@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from layers.Invertible import RevIN
 
 class SCIBlock(nn.Module):
     def __init__(self, enc_in, kernel_size=3, dilation=1, dropout=0.5, d_model=64):
@@ -94,13 +95,16 @@ class SCITree(nn.Module):
 class Model(nn.Module):
     def __init__(self, configs):
         super(Model, self).__init__()
-        self.encoder = SCITree(level=3, enc_in=configs.enc_in, kernel_size=3, dilation=1, dropout=0.5, d_model=configs.d_model)
+        self.encoder = SCITree(level=1, enc_in=configs.enc_in, kernel_size=3, dilation=1, dropout=0.5, d_model=configs.d_model)
         self.projection = nn.Conv1d(configs.seq_len, configs.pred_len, kernel_size=1, stride=1, bias=False)
-    
+        self.rev = RevIN(configs.enc_in)
+
     def forward(self, x):
+        x = self.rev(x, 'norm')
         res = x
         x = self.encoder(x)
         x += res
         x = self.projection(x)
+        x = self.rev(x, 'denorm')
 
         return x

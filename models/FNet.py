@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from layers.Embed import RevIN
+from layers.Invertible import RevIN
 
 class FNetBlock(nn.Module):
     def __init__(self, input_dim, mlp_dim, dropout=0.1):
