@@ -9,7 +9,6 @@ data_dict = {
     'custom': Dataset_Custom,
 }
 
-
 def data_provider(args, flag):
     Data = data_dict[args.data]
     timeenc = 0 if args.embed != 'timeF' else 1
@@ -19,12 +18,14 @@ def data_provider(args, flag):
         drop_last = True
         batch_size = args.batch_size
         freq = args.freq
+
     elif flag == 'pred':
         shuffle_flag = False
         drop_last = False
         batch_size = 1
         freq = args.freq
         Data = Dataset_Pred
+
     else:
         shuffle_flag = True
         drop_last = True
@@ -48,4 +49,5 @@ def data_provider(args, flag):
         shuffle=shuffle_flag,
         num_workers=args.num_workers,
         drop_last=drop_last)
+        
     return data_set, data_loader
