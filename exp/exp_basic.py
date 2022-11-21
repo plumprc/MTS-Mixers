@@ -1,7 +1,5 @@
 import os
 import torch
-import numpy as np
-
 
 class Exp_Basic(object):
     def __init__(self, args):
@@ -22,6 +20,7 @@ class Exp_Basic(object):
         else:
             device = torch.device('cpu')
             print('Use CPU')
+            
         return device
 
     def _get_data(self):
