@@ -78,3 +78,28 @@ class RevIN(nn.Module):
         x = x + self.mean
         
         return x
+
+
+class InvDiff(nn.Module):
+    def __init__(self, num_features: int):
+        super(InvDiff, self).__init__()
+
+        self.num_features = num_features
+        self.pivot = None
+
+    def forward(self, x, mode):
+        if mode == 'diff':
+            self.pivot = x[:, -1]
+            x = torch.diff(x, dim=1)
+
+            return x
+        
+        elif mode == 'restore':
+            y = torch.zeros_like(x)
+            y[:, 0] = x[:, 0] + self.pivot
+            for idx in range(y.shape[1]-1):
+                y[:, idx] = x[:, idx] + y[:, idx-1]
+            
+            return y
+        
+        else: raise NotImplementedError

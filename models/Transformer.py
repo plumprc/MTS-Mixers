@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from layers.TransformerBlocks import Encoder, Decoder
 from layers.Embedding import DataEmbedding, DataEmbedding_wo_temp
-from layers.Invertible import RevIN      
+from layers.Invertible import RevIN, InvDiff     
 
 class Model(nn.Module):
     """
@@ -36,11 +36,13 @@ class Model(nn.Module):
             norm_layer=torch.nn.LayerNorm(configs.d_model),
         )
         self.projection = nn.Linear(configs.d_model, configs.c_out)
-        self.rev = RevIN(configs.c_out)
+        self.rev = RevIN(configs.c_out) if configs.rev else None
+        # self.diff = InvDiff(configs.c_out)
 
     def forward(self, x_enc, x_mark_enc, x_dec, x_mark_dec, enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
-        
-        # x_enc = self.rev(x_enc, 'norm')
+        x_enc = self.rev(x_enc, 'norm') if self.rev else x_enc
+        # x_enc = self.diff(x_enc, 'diff')
+
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)
 
@@ -48,7 +50,8 @@ class Model(nn.Module):
         dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
         dec_out = self.projection(dec_out)
 
-        # dec_out = self.rev(dec_out, 'denorm')
+        dec_out = self.rev(dec_out, 'denorm') if self.rev else dec_out
+        # dec_out = self.diff(dec_out, 'restore')
 
         if self.output_attention:
             return dec_out[:, -self.pred_len:, :], attns

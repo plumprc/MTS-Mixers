@@ -37,3 +37,11 @@ python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M 
 <!-- Traffic -->
 
 python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 862 --itr 1 --batch_size 16 --learning_rate 0.05 --model SCINet
+
+python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --label_len 0 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 862 --dec_in 862 --c_out 862 --itr 1 --model Transformer --learning_rate 0.05 --train_epochs 4
+
+<!-- TSM -->
+
+python -u run.py --is_training 1 --data_path TSM1.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 4 --dec_in 4 --c_out 4 --itr 1 --model Transformer --train_epochs 1
+
+python -u run.py --is_training 1 --data_path TSM2.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 2 --dec_in 2 --c_out 2 --itr 1 --model Transformer --train_epochs 1

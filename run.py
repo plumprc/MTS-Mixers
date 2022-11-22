@@ -35,6 +35,8 @@ if __name__ == '__main__':
     parser.add_argument('--pred_len', type=int, default=96, help='prediction sequence length')
 
     parser.add_argument('--individual', action='store_true', default=False, help='DLinear: a linear layer for each variate(channel) individually')
+    parser.add_argument('--seg', type=int, default=20, help='prediction plot segments')
+    parser.add_argument('--rev', type=bool, default=False, help='whether to apply RevIN')
     
     # model 
     parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + positional embedding')
