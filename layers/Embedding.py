@@ -127,7 +127,7 @@ class DataEmbedding_wo_temp(nn.Module):
         self.position_embedding = PositionalEmbedding(d_model=d_model)
         self.dropout = nn.Dropout(p=dropout)
 
-    def forward(self, x, x_mark):
+    def forward(self, x, x_mark=None):
         x = self.value_embedding(x) + self.position_embedding(x)
         
         return self.dropout(x)
