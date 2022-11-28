@@ -21,7 +21,7 @@ class Model(nn.Module):
             norm_layer=torch.nn.LayerNorm(configs.d_model)
         )
 
-        self.projection_channel = nn.Linear(configs.d_model, configs.c_out)
+        self.projection_channel = nn.Linear(configs.d_model, configs.enc_in)
         self.projection_temporal = nn.Linear(configs.seq_len, configs.pred_len)
         self.rev = RevIN(configs.enc_in) if configs.rev else None
 
