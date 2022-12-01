@@ -151,7 +151,7 @@ class Exp_Main(Exp_Basic):
                     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
                     iter_count = 0
                     time_now = time.time()
-
+                    
                 if self.args.use_amp:
                     scaler.scale(loss).backward()
                     scaler.step(model_optim)

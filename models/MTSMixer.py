@@ -14,6 +14,24 @@ class MLPBlock(nn.Module):
         return self.fc2(self.gelu(self.fc1(x)))
 
 
+class ParaMixerBlock(nn.Module):
+    def __init__(self, tokens_dim, channels_dim, tokens_hidden_dim, channels_hidden_dim):
+        super().__init__()
+        self.tokens_mixing = MLPBlock(tokens_dim, mlp_dim=tokens_hidden_dim)
+        self.channels_mixing = MLPBlock(channels_dim, mlp_dim=channels_hidden_dim)
+        self.norm = nn.LayerNorm(channels_dim)
+
+    def forward(self,x):
+        # token-mixing [B, D, #tokens]
+        temp = self.norm(x).transpose(1, 2)
+        temp = self.tokens_mixing(temp)
+
+        # channel-mixing [B, #tokens, D]
+        chan = self.channels_mixing(self.norm(x))
+
+        return temp + chan
+
+
 class MixerBlock(nn.Module):
     def __init__(self, tokens_dim, channels_dim, tokens_hidden_dim, channels_hidden_dim):
         super().__init__()

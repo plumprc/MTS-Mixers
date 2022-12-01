@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from layers.TransformerBlocks import Encoder, Decoder
 from layers.Embedding import DataEmbedding, DataEmbedding_wo_temp
-from layers.Invertible import RevIN, InvDiff     
+from layers.Invertible import RevIN, InvDiff
 
 class Model(nn.Module):
     """
