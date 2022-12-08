@@ -1,5 +1,8 @@
 import numpy as np
 
+def R2(pred, true):
+    return 1 - np.mean((pred - true) ** 2) / np.var(true)
+
 def RSE(pred, true):
     return np.sqrt(np.sum((true - pred) ** 2)) / np.sqrt(np.sum((true - true.mean()) ** 2))
 

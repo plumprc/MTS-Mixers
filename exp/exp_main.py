@@ -9,7 +9,7 @@ from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from models import Transformer, DLinear, Linear, NLinear, SCINet, ConvFC, MTSMixer, MTSMatrix, FNet, Transformer_lite
 from utils.tools import EarlyStopping, adjust_learning_rate, visual
-from utils.metrics import metric
+from utils.metrics import metric, R2
 
 warnings.filterwarnings('ignore')
 
@@ -247,7 +247,8 @@ class Exp_Main(Exp_Basic):
         #     os.makedirs(folder_path)
 
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
-        print('mse:{}, mae:{}'.format(mse, mae))
+        R_squared = R2(preds, trues)
+        print('mse:{}, mae:{}, R2:{}'.format(mse, mae, R_squared))
         # print('mse:{}, mae:{}, rse:{}, corr:{}'.format(mse, mae, rse, corr))
 
         # np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe,rse, corr]))

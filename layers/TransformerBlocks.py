@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.masking import TriangularCausalMask
+# from utils.masking import TriangularCausalMask
 import numpy as np
 from math import sqrt
 
@@ -28,7 +28,8 @@ class Attention(nn.Module):
 
         if self.mask_flag:
             if attn_mask is None:
-                attn_mask = TriangularCausalMask(B, L, device=queries.device)
+                # attn_mask = TriangularCausalMask(B, L, device=queries.device)
+                pass
 
             scores.masked_fill_(attn_mask.mask, -np.inf)
 
