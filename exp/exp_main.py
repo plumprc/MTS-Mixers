@@ -7,13 +7,13 @@ import torch.nn as nn
 import torch.optim as optim
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
-from models import Transformer, DLinear, Linear, NLinear, SCINet, ConvFC, MTSMixer, MTSMatrix, FNet, Transformer_lite
+from models import Transformer, DLinear, Linear, NLinear, SCINet, MTSMixer, MTSMatrix, FNet, Transformer_lite
 from utils.tools import EarlyStopping, adjust_learning_rate, visual
 from utils.metrics import metric, R2
 
 warnings.filterwarnings('ignore')
 
-non_transformer = ['Linear', 'NLinear', 'DLinear', 'SCINet', 'ConvFC', 'MTSMixer', 'MTSMatrix', 'FNet', 'Transformer_lite']
+non_transformer = ['Linear', 'NLinear', 'DLinear', 'SCINet', 'MTSMixer', 'MTSMatrix', 'FNet', 'Transformer_lite']
 
 class Exp_Main(Exp_Basic):
     def __init__(self, args):
@@ -26,7 +26,6 @@ class Exp_Main(Exp_Basic):
             'NLinear': NLinear,
             'Linear': Linear,
             'SCINet': SCINet,
-            'ConvFC': ConvFC,
             'MTSMixer': MTSMixer,
             'MTSMatrix': MTSMatrix,
             'FNet': FNet,

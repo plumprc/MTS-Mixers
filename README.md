@@ -29,8 +29,24 @@ MTSformer: towards universal multivariate time series modeling based on Transfor
 ### MTS-Mixer on ECL (96-96)
 
 |Setting|MSE|MAE
+|:-:|:-:|:-:
 |64-32|0.162|0.266
 |512-128|0.162|0.267
 |512-64|0.159|0.264
 |512-32|0.158|0.263
 |512-16|0.155|0.259
+
+## MLP-like on ECL (96-96)
+
+|Model|MSE|MAE|R2
+|:-:|:-:|:-:|:-:
+|Linear|0.195|0.278|0.808
+|Linear + LayerNorm|0.513|0.564|0.493
+|Linear + RevIN|0.197|0.274|0.805
+|Temporal mixing (d_model=512)|0.181|0.267|0.821
+|Temporal mixing + RevIN|0.169|0.257|0.833
+|Temporal mixing (2-layers) + RevIN|0.161|0.251|0.841
+|Temporal mixing (shortcut)|0.182|0.268|0.821
+|Temporal mixing (shortcut) + RevIN|0.170|0.258|0.832
+|Temporal mixing (even_odd) + RevIN|0.170|0.258|0.832
+|Temporal mixing (even_odd 2-layers) + RevIN|0.162|0.252|0.840

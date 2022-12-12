@@ -1,8 +1,8 @@
 <!-- ECL -->
 
-python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 321 --itr 1 --batch_size 16 --learning_rate 0.001 --model MTSMixer --d_ff 16 --train_epochs 7
+python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 321 --itr 1 --batch_size 16 --learning_rate 0.001 --model MTSMixer --d_ff 16 --train_epochs 7 --rev --fac_C
 
-python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 321 --dec_in 321 --c_out 321 --itr 1 --model Transformer --train_epochs 5 --rev 1
+python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 321 --dec_in 321 --c_out 321 --itr 1 --model Transformer --train_epochs 5 --rev
 
 <!-- ETTm2 -->
 
@@ -41,12 +41,6 @@ python -u run.py --is_training 1 --data_path ILI.csv --data custom --features M 
 python -u run.py --is_training 1 --data_path ILI.csv --data custom --features M --seq_len 36 --label_len 1 --pred_len 60 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1
 
 ---
-
-<!-- Appliance -->
-
-python -u run.py --is_training 1 --data_path Appliance.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 28 --itr 1 --batch_size 32 --learning_rate 0.005 --model Linear
-
-python -u run.py --is_training 1 --data_path Appliance.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 28 --dec_in 28 --c_out 28 --itr 1 --model Transformer --train_epochs 4 --rev 1
 
 <!-- ETTh1 -->
 
