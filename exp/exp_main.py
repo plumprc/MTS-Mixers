@@ -59,13 +59,19 @@ class Exp_Main(Exp_Basic):
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
                         if self.args.model in non_transformer:
-                            outputs = self.model(batch_x)
+                            if self.args.match:
+                                outputs, _ = self.model(batch_x)
+                            else:
+                                outputs = self.model(batch_x)
                         else:
                             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                                 self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
                     if self.args.model in non_transformer:
-                        outputs = self.model(batch_x)
+                        if self.args.match:
+                            outputs, _ = self.model(batch_x)
+                        else:
+                            outputs = self.model(batch_x)
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                             self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
@@ -120,7 +126,10 @@ class Exp_Main(Exp_Basic):
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
                         if self.args.model in non_transformer:
-                            outputs = self.model(batch_x)
+                            if self.args.match:
+                                outputs, m_loss = self.model(batch_x)
+                            else:
+                                outputs = self.model(batch_x)
                         else:
                             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                                 self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
@@ -129,10 +138,16 @@ class Exp_Main(Exp_Basic):
                         outputs = outputs[:, -self.args.pred_len:, f_dim:]
                         batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                         loss = criterion(outputs, batch_y)
+                        if self.args.match:
+                            for m in m_loss:
+                                loss += m
                         train_loss.append(loss.item())
                 else:
                     if self.args.model in non_transformer:
-                        outputs = self.model(batch_x)
+                        if self.args.match:
+                            outputs, m_loss = self.model(batch_x)
+                        else:
+                            outputs = self.model(batch_x)
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                             self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
@@ -141,6 +156,9 @@ class Exp_Main(Exp_Basic):
                     outputs = outputs[:, -self.args.pred_len:, f_dim:]
                     batch_y = batch_y[:, -self.args.pred_len:, f_dim:].to(self.device)
                     loss = criterion(outputs, batch_y)
+                    if self.args.match:
+                        for m in m_loss:
+                            loss += m
                     train_loss.append(loss.item())
 
                 if (i + 1) % 100 == 0:
@@ -205,13 +223,19 @@ class Exp_Main(Exp_Basic):
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
                         if self.args.model in non_transformer:
-                            outputs = self.model(batch_x)
+                            if self.args.match:
+                                outputs, _ = self.model(batch_x)
+                            else:
+                                outputs = self.model(batch_x)
                         else:
                             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                                 self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
                     if self.args.model in non_transformer:
-                        outputs = self.model(batch_x)
+                        if self.args.match:
+                            outputs, _ = self.model(batch_x)
+                        else:
+                             outputs = self.model(batch_x)
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                             self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
@@ -280,13 +304,19 @@ class Exp_Main(Exp_Basic):
                 if self.args.use_amp:
                     with torch.cuda.amp.autocast():
                         if self.args.model in non_transformer:
-                            outputs = self.model(batch_x)
+                            if self.args.match:
+                                outputs, _ = self.model(batch_x)
+                            else:
+                                outputs = self.model(batch_x)
                         else:
                             outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                                 self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
                 else:
                     if self.args.model in non_transformer:
-                        outputs = self.model(batch_x)
+                        if self.args.match:
+                            outputs, _ = self.model(batch_x)
+                        else:
+                            outputs = self.model(batch_x)
                     else:
                         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0] if self.args.output_attention else \
                             self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)

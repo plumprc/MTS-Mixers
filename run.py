@@ -37,9 +37,10 @@ if __name__ == '__main__':
     parser.add_argument('--individual', action='store_true', default=False, help='DLinear: a linear layer for each variate(channel) individually')
     parser.add_argument('--seg', type=int, default=20, help='prediction plot segments')
     parser.add_argument('--rev', action='store_true', default=False, help='whether to apply RevIN')
-    parser.add_argument('--norm', action='store_true', default=True, help='whether to apply LayerNorm')
+    parser.add_argument('--norm', action='store_false', default=True, help='whether to apply LayerNorm')
     parser.add_argument('--fac_T', action='store_true', default=False, help='whether to apply factorized temporal interaction')
     parser.add_argument('--fac_C', action='store_true', default=False, help='whether to apply factorized channel interaction')
+    parser.add_argument('--match', action='store_true', default=False, help='whether to apply match loss')
     
     # model 
     parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + positional embedding')

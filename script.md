@@ -12,7 +12,7 @@ python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M
 
 <!-- Traffic -->
 
-python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 862 --itr 1 --batch_size 16 --learning_rate 0.05 --model MTSMixer --d_ff 64 --train_epochs 2
+python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --pred_len 96 --e_layers 1 --enc_in 862 --itr 1 --batch_size 16 --learning_rate 0.05 --model MTSMixer --d_ff 64 --rev --fac_C --train_epochs 2
 
 python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --label_len 0 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 862 --dec_in 862 --c_out 862 --itr 1 --model Transformer --learning_rate 0.05 --train_epochs 4 --rev 1
 
@@ -24,7 +24,7 @@ python -u run.py --is_training 1 --data_path PeMS04.csv --data custom --features
 
 <!-- Exchange -->
 
-python -u run.py --is_training 1 --data_path Exchange.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 8 --itr 1 --batch_size 8 --learning_rate 0.0005 --model Linear --gpu 3
+python -u run.py --is_training 1 --data_path Exchange.csv --data custom --features M --seq_len 96 --pred_len 96 --enc_in 8 --itr 1 --batch_size 8 --learning_rate 0.0005 --model MTSMixer --rev --norm
 
 python -u run.py --is_training 1 --data_path Exchange.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 8 --dec_in 8 --c_out 8 --itr 1 --model Transformer --train_epochs 1 --rev 1
 
