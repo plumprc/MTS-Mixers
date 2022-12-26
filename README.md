@@ -50,3 +50,10 @@ MTSformer: towards universal multivariate time series modeling based on Transfor
 |Temporal mixing (shortcut) + RevIN|0.170|0.258|0.832
 |Temporal mixing (even_odd) + RevIN|0.170|0.258|0.832
 |Temporal mixing (even_odd 2-layers) + RevIN|0.162|0.252|0.840
+
+## FEDformer with factorized MLP on ECL
+
+|H|MSE|MAE
+|:-:|:-:|:-:
+|96|0.185|0.300
+|192|0.198|0.312
