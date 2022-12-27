@@ -6,7 +6,7 @@ python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M 
 
 <!-- ETTm2 -->
 
-python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --d_model 8 --d_ff 4 --train_epochs 1 --rev --fac_C
+python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --train_epochs 6 --rev --norm --fac_T
 
 python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev
 
@@ -44,7 +44,7 @@ python -u run.py --is_training 1 --data_path ILI.csv --data custom --features M 
 
 <!-- ETTh1 -->
 
-python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model Transformer_lite --rev --norm --train_epochs 2
+python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --rev --norm --train_epochs 3 --fac_T
 
 python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev 1
 

@@ -15,29 +15,28 @@ class MLPBlock(nn.Module):
 
 
 class FactorizedTemporalMixing(nn.Module):
-    def __init__(self, input_dim, mlp_dim) :
+    def __init__(self, input_dim, mlp_dim, sampling) :
         super().__init__()
 
-        self.temporal_even = MLPBlock(input_dim // 2, mlp_dim)
-        self.temporal_odd = MLPBlock(input_dim // 2, mlp_dim)
+        assert sampling <= 8
+        self.sampling = sampling
+        self.temporal_fac = nn.ModuleList([
+            MLPBlock(input_dim // sampling, mlp_dim) for _ in range(sampling)
+        ])
 
-    def merge(self, even, odd):
-        assert even.shape[2] == odd.shape[2]
+    def merge(self, shape, x_list):
+        y = torch.zeros(shape, device=x_list[0].device)
+        for idx, x_pad in enumerate(x_list):
+            y[:, :, idx::self.sampling] = x_pad
 
-        even = even.transpose(0, 2)
-        odd = odd.transpose(0, 2)
-        merge = []
-
-        for i in range(even.shape[0]):
-            merge.append(even[i].unsqueeze(0))
-            merge.append(odd[i].unsqueeze(0))
-
-        return torch.cat(merge, 0).transpose(0, 2)
+        return y
 
     def forward(self, x):
-        x_even = self.temporal_even(x[:, :, 0::2])
-        x_odd = self.temporal_odd(x[:, :, 1::2])
-        x = self.merge(x_even, x_odd)
+        x_samp = []
+        for idx, samp in enumerate(self.temporal_fac):
+            x_samp.append(samp(x[:, :, idx::self.sampling]))
+
+        x = self.merge(x.shape, x_samp)
 
         return x
 
@@ -55,9 +54,9 @@ class FactorizedChannelMixing(nn.Module):
 
 
 class MixerBlock(nn.Module):
-    def __init__(self, tokens_dim, channels_dim, tokens_hidden_dim, channels_hidden_dim, fac_T, fac_C, norm_flag):
+    def __init__(self, tokens_dim, channels_dim, tokens_hidden_dim, channels_hidden_dim, fac_T, fac_C, sampling, norm_flag):
         super().__init__()
-        self.tokens_mixing = FactorizedTemporalMixing(tokens_dim, tokens_hidden_dim) if fac_T else MLPBlock(tokens_dim, tokens_hidden_dim)
+        self.tokens_mixing = FactorizedTemporalMixing(tokens_dim, tokens_hidden_dim, sampling) if fac_T else MLPBlock(tokens_dim, tokens_hidden_dim)
         self.channels_mixing = FactorizedChannelMixing(channels_dim, channels_hidden_dim) if fac_C else None
         self.norm = nn.LayerNorm(channels_dim) if norm_flag else None
 
@@ -80,7 +79,7 @@ class Model(nn.Module):
     def __init__(self, configs):
         super().__init__()
         self.mlp_blocks = nn.ModuleList([
-            MixerBlock(configs.seq_len, configs.enc_in, configs.d_model, configs.d_ff, configs.fac_T, configs.fac_C, configs.norm) for _ in range(configs.e_layers)
+            MixerBlock(configs.seq_len, configs.enc_in, configs.d_model, configs.d_ff, configs.fac_T, configs.fac_C, configs.sampling, configs.norm) for _ in range(configs.e_layers)
         ])
         self.norm = nn.LayerNorm(configs.enc_in) if configs.norm else None
         self.projection = nn.Linear(configs.seq_len, configs.pred_len)
