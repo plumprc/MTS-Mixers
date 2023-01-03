@@ -4,12 +4,6 @@ python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M 
 
 python -u run.py --is_training 1 --data_path ECL.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 321 --dec_in 321 --c_out 321 --itr 1 --model Transformer --train_epochs 5 --rev
 
-<!-- ETTm2 -->
-
-python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --train_epochs 6 --rev --norm --fac_T
-
-python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev
-
 <!-- Traffic -->
 
 python -u run.py --is_training 1 --data_path Traffic.csv --data custom --features M --seq_len 96 --pred_len 96 --e_layers 1 --enc_in 862 --itr 1 --batch_size 16 --learning_rate 0.05 --model MTSMixer --d_ff 64 --rev --fac_C --train_epochs 3
@@ -44,12 +38,24 @@ python -u run.py --is_training 1 --data_path ILI.csv --data custom --features M 
 
 <!-- ETTh1 -->
 
-python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --rev --norm --train_epochs 3 --fac_T
+python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --rev --norm --train_epochs 6 --fac_T --sampling 6
 
-python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev 1
+python -u run.py --is_training 1 --data_path ETTh1.csv --data ETTh1 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev
 
-<!-- TSM -->
+<!-- ETTm1 -->
 
-python -u run.py --is_training 1 --data_path TSM1.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 4 --dec_in 4 --c_out 4 --itr 1 --model Transformer --train_epochs 1
+python -u run.py --is_training 1 --data_path ETTm1.csv --data ETTm1 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --train_epochs 6 --rev --norm --fac_T --sampling 8
 
-python -u run.py --is_training 1 --data_path TSM2.csv --data custom --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 2 --dec_in 2 --c_out 2 --itr 1 --model Transformer --train_epochs 1
+python -u run.py --is_training 1 --data_path ETTm1.csv --data ETTm1 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev
+
+<!-- ETTh2 -->
+
+python -u run.py --is_training 1 --data_path ETTh2.csv --data ETTh2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --rev --norm --train_epochs 6
+
+python -u run.py --is_training 1 --data_path ETTh2.csv --data ETTh2 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev
+
+<!-- ETTm2 -->
+
+python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --pred_len 96 --enc_in 7 --itr 1 --batch_size 32 --learning_rate 0.005 --model MTSMixer --train_epochs 6 --rev --norm --fac_T --sampling 3
+
+python -u run.py --is_training 1 --data_path ETTm2.csv --data ETTm2 --features M --seq_len 96 --label_len 1 --pred_len 96 --e_layers 2 --d_layers 1 --factor 3 --enc_in 7 --dec_in 7 --c_out 7 --itr 1 --model Transformer --train_epochs 1 --rev

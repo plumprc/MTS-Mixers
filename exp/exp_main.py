@@ -36,6 +36,9 @@ class Exp_Main(Exp_Basic):
         if self.args.use_multi_gpu and self.args.use_gpu:
             model = nn.DataParallel(model, device_ids=self.args.device_ids)
 
+        total = sum([param.nelement() for param in model.parameters()])
+        print('Number of parameters: %.2fM' % (total / 1e6))
+
         return model
 
     def _get_data(self, flag):

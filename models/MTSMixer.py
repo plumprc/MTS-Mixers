@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from layers.Invertible import RevIN
+from utils.decomposition import svd_denoise, NMF
 
 class MLPBlock(nn.Module):
     def __init__(self, input_dim, mlp_dim) :

@@ -69,27 +69,23 @@ class SCITree(nn.Module):
             self.SCINet_odd = SCITree(level - 1, enc_in, kernel_size, dilation, dropout, d_model)
             self.SCINet_even = SCITree(level - 1, enc_in, kernel_size, dilation, dropout, d_model)
     
-    def zip_up_the_pants(self, even, odd):
+    def zip_up_the_pants(self, shape, even, odd):
         assert even.shape[1] == odd.shape[1]
 
-        even = even.transpose(0, 1)
-        odd = odd.transpose(0, 1)
-        merge = []
+        merge = torch.zeros(shape, device=even.device)
+        merge[:, 0::2, :] = even
+        merge[:, 1::2, :] = odd
 
-        for i in range(even.shape[0]):
-            merge.append(even[i].unsqueeze(0))
-            merge.append(odd[i].unsqueeze(0))
-
-        return torch.cat(merge, 0).transpose(0, 1) # [B, L, D]
+        return merge # [B, L, D]
         
     def forward(self, x):
         # [B, L, D]
         x_even_update, x_odd_update = self.block(x)
 
         if self.level == 0:
-            return self.zip_up_the_pants(x_even_update, x_odd_update)
+            return self.zip_up_the_pants(x.shape, x_even_update, x_odd_update)
         else:
-            return self.zip_up_the_pants(self.SCINet_even(x_even_update), self.SCINet_odd(x_odd_update))
+            return self.zip_up_the_pants(x.shape, self.SCINet_even(x_even_update), self.SCINet_odd(x_odd_update))
 
 
 class Model(nn.Module):
