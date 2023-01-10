@@ -41,6 +41,7 @@ if __name__ == '__main__':
     parser.add_argument('--fac_T', action='store_true', default=False, help='whether to apply factorized temporal interaction')
     parser.add_argument('--sampling', type=int, default=2, help='the number of downsampling in factorized temporal interaction')
     parser.add_argument('--fac_C', action='store_true', default=False, help='whether to apply factorized channel interaction')
+    parser.add_argument('--refine', action='store_true', default=False, help='whether to refine the linear prediction')
     
     # model 
     parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + positional embedding')
@@ -64,9 +65,9 @@ if __name__ == '__main__':
     parser.add_argument('--num_workers', type=int, default=10, help='data loader num workers')
     parser.add_argument('--itr', type=int, default=1, help='experiments times')
     parser.add_argument('--train_epochs', type=int, default=10, help='train epochs')
-    parser.add_argument('--batch_size', type=int, default=32, help='batch size of train input data')
+    parser.add_argument('--batch_size', type=int, default=16, help='batch size of train input data')
     parser.add_argument('--patience', type=int, default=3, help='early stopping patience')
-    parser.add_argument('--learning_rate', type=float, default=0.0001, help='optimizer learning rate')
+    parser.add_argument('--learning_rate', type=float, default=0.001, help='optimizer learning rate')
     parser.add_argument('--loss', type=str, default='mse', help='loss function')
     parser.add_argument('--lradj', type=str, default='type1', help='adjust learning rate')
     parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
