@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from layers.TransformerBlocks import Encoder
-from layers.Embedding import DataEmbedding_wo_temp
+from layers.Embedding import PositionalEmbedding
 from layers.Invertible import RevIN
 
 class FactorizedTemporalMixing(nn.Module):
@@ -12,9 +12,9 @@ class FactorizedTemporalMixing(nn.Module):
         self.sampling = sampling
         self.temporal_fac = nn.ModuleList([
             Encoder(
-            configs.e_layers, configs.n_heads, configs.d_model, configs.d_ff, 
+            configs.e_layers, configs.n_heads, configs.enc_in, configs.d_model, 
             configs.dropout, configs.activation, configs.output_attention,
-            norm_layer=torch.nn.LayerNorm(configs.d_model)
+            norm_layer=torch.nn.LayerNorm(configs.enc_in)
             ) for _ in range(sampling)
         ])
 
@@ -45,20 +45,18 @@ class Model(nn.Module):
         self.label_len = configs.label_len
         self.pred_len = configs.pred_len
         self.output_attention = configs.output_attention
-        self.enc_embedding = DataEmbedding_wo_temp(configs.enc_in, configs.d_model, configs.dropout)
+        self.pos_encoding = PositionalEmbedding(configs.enc_in)
 
         self.encoder = FactorizedTemporalMixing(configs, configs.sampling)
-        self.projection_channel = nn.Linear(configs.d_model, configs.enc_in)
-        self.projection_temporal = nn.Linear(configs.seq_len, configs.pred_len)
+        self.projection = nn.Linear(configs.seq_len, configs.pred_len)
         self.rev = RevIN(configs.enc_in) if configs.rev else None
 
     def forward(self, x):
         x = self.rev(x, 'norm') if self.rev else x
 
-        x = self.enc_embedding(x, None)
+        x += self.pos_encoding(x)
         x, attns = self.encoder(x)
-        x = self.projection_channel(x)
-        x = self.projection_temporal(x.transpose(1, 2)).transpose(1, 2)
+        x = self.projection(x.transpose(1, 2)).transpose(1, 2)
 
         x = self.rev(x, 'denorm') if self.rev else x
 
