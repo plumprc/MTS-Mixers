@@ -5,8 +5,8 @@ from layers.Invertible import RevIN
 class Matrix(nn.Module):
     def __init__(self, seq_len, enc_in, mat):
         super().__init__()
-        self.temporal = nn.Parameter(torch.rand(seq_len, seq_len)) if mat == 'rand' else nn.Parameter(torch.eye(seq_len))
-        self.channels = nn.Parameter(torch.rand(enc_in, enc_in)) if mat == 'rand' else nn.Parameter(torch.eye(enc_in, enc_in))
+        self.temporal = nn.Parameter(torch.rand(seq_len, seq_len)) if mat == 0 else nn.Parameter(torch.eye(seq_len))
+        self.channels = nn.Parameter(torch.rand(enc_in, enc_in)) if mat == 0 else nn.Parameter(torch.eye(enc_in, enc_in))
         self.norm = nn.LayerNorm(enc_in)
         self.acti = nn.GELU()
     

@@ -42,7 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('--sampling', type=int, default=2, help='the number of downsampling in factorized temporal interaction')
     parser.add_argument('--fac_C', action='store_true', default=False, help='whether to apply factorized channel interaction')
     parser.add_argument('--refine', action='store_true', default=False, help='whether to refine the linear prediction')
-    parser.add_argument('--mat', type=str, default='random', help='option: [random, identity]')
+    parser.add_argument('--mat', type=int, default=0, help='option: [0-random, 1-identity]')
     
     # model 
     parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + positional embedding')
