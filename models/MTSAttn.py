@@ -8,7 +8,7 @@ class FactorizedTemporalMixing(nn.Module):
     def __init__(self, configs, sampling) :
         super().__init__()
 
-        assert sampling <= 8
+        assert sampling in [1, 2, 3, 4, 6, 8, 12]
         self.sampling = sampling
         self.temporal_fac = nn.ModuleList([
             Encoder(

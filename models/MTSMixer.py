@@ -19,7 +19,7 @@ class FactorizedTemporalMixing(nn.Module):
     def __init__(self, input_dim, mlp_dim, sampling) :
         super().__init__()
 
-        assert sampling <= 8
+        assert sampling in [1, 2, 3, 4, 6, 8, 12]
         self.sampling = sampling
         self.temporal_fac = nn.ModuleList([
             MLPBlock(input_dim // sampling, mlp_dim) for _ in range(sampling)
