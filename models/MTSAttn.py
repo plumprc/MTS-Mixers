@@ -14,7 +14,7 @@ class FactorizedTemporalMixing(nn.Module):
             Encoder(
             configs.e_layers, configs.n_heads, configs.enc_in, configs.d_model, 
             configs.dropout, configs.activation, configs.output_attention,
-            norm_layer=torch.nn.LayerNorm(configs.enc_in)
+            norm_layer=torch.nn.LayerNorm(configs.enc_in) if configs.norm else None
             ) for _ in range(sampling)
         ])
 

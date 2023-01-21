@@ -244,20 +244,8 @@ class Exp_Main(Exp_Basic):
         trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
         inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
 
-        # result save
-        # folder_path = './results/' + setting + '/'
-        # if not os.path.exists(folder_path):
-        #     os.makedirs(folder_path)
-
-        mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
-        R_squared = R2(preds, trues)
-        print('mse:{}, mae:{}, R2:{}'.format(mse, mae, R_squared))
-        # print('mse:{}, mae:{}, rse:{}, corr:{}'.format(mse, mae, rse, corr))
-
-        # np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe,rse, corr]))
-        # np.save(folder_path + 'pred.npy', preds)
-        # np.save(folder_path + 'true.npy', trues)
-        # np.save(folder_path + 'x.npy', inputx)
+        mse, mae, r_squared = metric(preds, trues)
+        print('mse:{:.4f}, mae:{:.4f}, R2:{:.4f}'.format(mse, mae, r_squared))
 
         return
 

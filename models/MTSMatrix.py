@@ -30,7 +30,7 @@ class FactorizedTemporalMixing(nn.Module):
     def merge(self, shape, x_list):
         y = torch.zeros(shape, device=x_list[0].device)
         for idx, x_pad in enumerate(x_list):
-            y[:, :, idx::self.sampling] = x_pad
+            y[:, idx::self.sampling, :] = x_pad
 
         return y
 
