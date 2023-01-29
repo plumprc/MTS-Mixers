@@ -1,5 +1,5 @@
-# MTSformer
-MTSformer: towards universal multivariate time series modeling based on Transformer?
+# MTS-Mixers
+MTS-Mixers: Multivariate Time Series via Factorized Temporal and Channel Mixing
 
 ## The variants of MTS-Mixers on ECL
 
