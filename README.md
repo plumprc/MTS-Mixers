@@ -12,7 +12,7 @@ The architecture of MTS-Mixers comprises modules in a dashed box which defines a
 
 Inspired by the fact that the original sequence and the down-sampled sequence may maintain the same temporal characteristics, we apply down-sampling to alleviate the temporal redundancy for better utilizing point-wise dependency as
 
-$$\mathcal{X}_{T,i}=\hat{\mathcal{X}_T}[i::s, :],\quad0\leq i<s,$$
+$$\mathcal{X}_{T,i}=\hat{\mathcal{X}_T}[i::s, :],\quad0\leq i\leq s-1,$$
 
 $$\mathcal{X}_T=\mathsf{merge}(\mathcal{X}_{T,0},\mathcal{X}_{T,1},\dots,\mathcal{X}_{T,s-1}),$$
 
@@ -26,7 +26,7 @@ From the perspective of tensors, we notice that time series generally have the l
 
 $$\hat{\mathcal{X}_C}=\mathcal{X}_C+N\approx UV+N,$$
 
-where $N\in\mathbb{R}^{n\times c}$ represents the noise and $\mathcal{X}_C\in\mathbb{R}^{n\times c}$ denotes the channel dependency after denoising. In practice, using a channel MLP with small hidden states ($h<c$) can achieve comparable or even better performance than traditional decomposition methods.
+where $N\in\mathbb{R}^{n\times c}$ represents the noise and $\mathcal{X}_C\in\mathbb{R}^{n\times c}$ denotes the channel dependency after denoising. In practice, using a channel MLP with small hidden states (less than $c$) can achieve comparable or even better performance than traditional decomposition methods.
 
 ## Get Started
 1. Install Python>=3.6, PyTorch>=1.5.0.
