@@ -19,6 +19,7 @@ class moving_avg(nn.Module):
         x = torch.cat([front, x, end], dim=1)
         x = self.avg(x.permute(0, 2, 1))
         x = x.permute(0, 2, 1)
+        
         return x
 
 

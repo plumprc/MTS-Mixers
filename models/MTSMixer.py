@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from layers.Invertible import RevIN
+from layers.Projection import ChannelProjection
 from utils.decomposition import svd_denoise, NMF
 
 class MLPBlock(nn.Module):
@@ -83,8 +84,9 @@ class Model(nn.Module):
             MixerBlock(configs.seq_len, configs.enc_in, configs.d_model, configs.d_ff, configs.fac_T, configs.fac_C, configs.sampling, configs.norm) for _ in range(configs.e_layers)
         ])
         self.norm = nn.LayerNorm(configs.enc_in) if configs.norm else None
-        self.projection = nn.Linear(configs.seq_len, configs.pred_len)
-        self.refine = MLPBlock(configs.pred_len, configs.d_model) if configs.refine else None
+        self.projection = ChannelProjection(configs.seq_len, configs.pred_len, configs.enc_in, configs.individual)
+        # self.projection = nn.Linear(configs.seq_len, configs.pred_len)
+        # self.refine = MLPBlock(configs.pred_len, configs.d_model) if configs.refine else None
         self.rev = RevIN(configs.enc_in) if configs.rev else None
 
     def forward(self, x):
@@ -94,8 +96,8 @@ class Model(nn.Module):
             x = block(x)
 
         x = self.norm(x) if self.norm else x
-        x = self.projection(x.transpose(1, 2)).transpose(1, 2)
-        x = self.refine(x.transpose(1, 2)).transpose(1, 2) if self.refine else x
+        x = self.projection(x)
+        # x = self.refine(x.transpose(1, 2)).transpose(1, 2) if self.refine else x
         x = self.rev(x, 'denorm') if self.rev else x
 
         return x
